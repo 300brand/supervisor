@@ -35,8 +35,22 @@ var supervisorApp = angular.module('supervisorApp', [])
 
 supervisorApp.controller('SupervisorListCtrl', function($scope, $http) {
 	$http.get('allStatus.php').success(function(data) {
-		$scope.supervisors = data
+		$scope.processes = []
+		console.debug(data)
+		for (s in data) {
+			for (p in data[s].processes) {
+				console.log("data[%s][%s] = %s", s,p,data[s].processes[p])
+				data[s].processes[p].alias = data[s].alias
+				$scope.processes.push(data[s].processes[p])
+			}
+		}
 	})
+	$scope.isRestartable = function(status) {
+		return status == 'RUNNING'
+	}
+	$scope.isStartable = function(status) {
+		return status != 'RUNNING'
+	}
 })
 </script>
 </head>
@@ -66,59 +80,33 @@ supervisorApp.controller('SupervisorListCtrl', function($scope, $http) {
 	</div>
 </div>
 
-
 <div class="container-fluid">
 	<div class="row">
 		<div class="main">
 			<h1 class="page-header">Dashboard</h1>
-
-<?php /*
-			<div class="row placeholders">
-				<div class="col-xs-6 col-sm-3 placeholder">
-					<img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
-					<h4>Label</h4>
-					<span class="text-muted">Something else</span>
-				</div>
-				<div class="col-xs-6 col-sm-3 placeholder">
-					<img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
-					<h4>Label</h4>
-					<span class="text-muted">Something else</span>
-				</div>
-				<div class="col-xs-6 col-sm-3 placeholder">
-					<img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
-					<h4>Label</h4>
-					<span class="text-muted">Something else</span>
-				</div>
-				<div class="col-xs-6 col-sm-3 placeholder">
-					<img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
-					<h4>Label</h4>
-					<span class="text-muted">Something else</span>
-				</div>
-			</div>
-*/ ?>
 			<h2 class="sub-header">Processes</h2>
 			<div class="table-responsive">
 				<table class="table table-striped">
 					<thead>
 						<tr>
+							<th>Server</th>
 							<th>State</th>
 							<th>Description</th>
 							<th>Name</th>
 							<th>Action</th>
 						</tr>
 					</thead>
-					<tbody ng-repeat="supervisor in supervisors">
-						<tr>
-							<th colspan="4">{{ supervisor.alias }}</th>
-						</tr>
-						<tr ng-repeat="process in supervisor.processes">
+					<tbody>
+						<tr ng-repeat="process in processes">
+							<th>{{ process.alias }}</th>
 							<td>{{ process.statename }}</td>
 							<td>{{ process.description }}</td>
 							<td>{{ process.name }}</td>
 							<td>
-								<a href="">Restart</a>
-								<a href="">Stop</a>
-								<a href="">Clear Log</a>
+								<a ng-href="/do.php?server={{ supervisor.alias }}&amp;procname={{ process.name }}&amp;action=restart" ng-if="isRestartable(process.statename)">Restart</a>
+								<a ng-href="/do.php?server={{ supervisor.alias }}&amp;procname={{ process.name }}&amp;action=start" ng-if="isStartable(process.statename)">Start</a>
+								<a ng-href="/do.php?server={{ supervisor.alias }}&amp;procname={{ process.name }}&amp;action=stop" ng-if="isRestartable(process.statename)">Stop</a>
+								<a ng-href="/do.php?server={{ supervisor.alias }}&amp;procname={{ process.name }}&amp;action=restart">Clear Log</a>
 							</td>
 						</tr>
 					</tbody>
@@ -127,7 +115,6 @@ supervisorApp.controller('SupervisorListCtrl', function($scope, $http) {
 		</div>
 	</div>
 </div>
-
 
 </body>
 </html>
