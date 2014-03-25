@@ -5,7 +5,7 @@ function call($rpc, $method, array $params) {
 	curl_setopt_array($ch, array(
 		CURLOPT_URL            => $rpc,
 		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_TIMEOUT        => 1,
+		CURLOPT_TIMEOUT        => 10,
 		CURLOPT_POSTFIELDS     => $data_in,
 		CURLOPT_HTTPHEADER     => array(
 			"Content-Type: text/xml",

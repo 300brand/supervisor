@@ -1,6 +1,30 @@
 <?php
 $machines = array(
 	array(
+		'alias' => "springbank.node.campbeltown.coverage.net",
+		'rpc'   => "192.168.20.38:9001/RPC2",
+	),
+	array(
+		'alias' => "glengyle.node.campbeltown.coverage.net",
+		'rpc'   => "192.168.20.53:9001/RPC2",
+	),
+	array(
+		'alias' => "fettercairn.node.highland.coverage.net",
+		'rpc'   => "192.168.20.40:9001/RPC2",
+	),
+	array(
+		'alias' => "glenturret.node.highland.coverage.net",
+		'rpc'   => "192.168.20.42:9001/RPC2",
+	),
+	array(
+		'alias' => "arran.node.island.coverage.net",
+		'rpc'   => "192.168.20.46:9001/RPC2",
+	),
+	array(
+		'alias' => "scapa.node.island.coverage.net",
+		'rpc'   => "192.168.20.50:9001/RPC2",
+	),
+	array(
 		'alias' => "rpi-0000.node.pipod00.coverage.net",
 		'rpc'   => "192.168.20.65:9001/RPC2",
 	),
