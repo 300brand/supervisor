@@ -54,18 +54,17 @@ switch ($in->action) {
 	case 'stopgroup':
 		send(call($rpc, 'supervisor.stopProcessGroup', $params), true);
 	break;
-	// Log management (currently doesn't work)
+	// Log management (currently doesn't work?)
 	case 'viewlog':
-		$log_params = array(
-			$in->procname,
-			0,
-			1024,
-		);
+		$log_params = array($in->procname, 0, 1024);
 		$results = array(
 			'stdout' => call($rpc, 'supervisor.tailProcessStdoutLog', $log_params),
 			'stderr' => call($rpc, 'supervisor.tailProcessStderrLog', $log_params),
 		);
 		send($results, false);
+	break;
+	case 'clearlog':
+		send(call($rpc, 'supervisor.clearProcessLogs', array($in->procname)), true);
 	break;
 	default:
 		fail("Invalid action: {$in->action}", true);

@@ -14,7 +14,11 @@ function call($rpc, $method, array $params) {
 	));
 	$data_out = curl_exec($ch);
 	if (curl_errno($ch)) {
-		return null;
+		return array(
+			'_error' => true,
+			'errno'  => curl_errno($ch),
+			'errstr' => curl_error($ch),
+		);
 	} else {
 		curl_close($ch);
 		return xmlrpc_decode($data_out);

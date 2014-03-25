@@ -106,7 +106,7 @@ supervisorApp.controller('SupervisorListCtrl', function($scope, $http) {
 	<div class="row">
 
 		<div class="col-sm-3 col-md-2 sidebar">
-			<p class="navbar-brand">Coverage Dashboard</p>
+			<div class="navbar-brand">Coverage Dashboard</div>
 			<ul class="nav nav-sidebar">
 				<li ng-repeat="supervisor in supervisors">
 					<a href="#{{ supervisor.alias }}">
