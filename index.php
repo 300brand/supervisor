@@ -12,6 +12,9 @@
 .main {
 	padding-top:30px;
 }
+.navbar-brand {
+	float:none;
+}
 @media (min-width: 768px) {
 	.main {
 		padding-right: 40px;
@@ -79,6 +82,18 @@ supervisorApp.controller('SupervisorListCtrl', function($scope, $http) {
 		}
 		console.debug(data)
 	})
+	$scope.glyphFor = function(state) {
+		switch (state) {
+			case 'STOPPED':  return 'glyphicon-stop'
+			case 'STARTING': return 'glyphicon-circle-arrow-up'
+			case 'RUNNING':  return 'glyphicon-play'
+			case 'BACKOFF':  return 'glyphicon-time'
+			case 'STOPPING': return 'glyphicon-circle-arrow-down'
+			case 'EXITED':   return 'glyphicon-off'
+			case 'FATAL':    return 'glyphicon-warning-sign'
+			default:         return 'glyphicon-warning-sign'
+		}
+	}
 	$scope.stateClass = function(state) {
 		switch (state) {
 			case 'STOPPED':  return 'default'
@@ -115,7 +130,8 @@ supervisorApp.controller('SupervisorListCtrl', function($scope, $http) {
 							ng-repeat="(state, count) in supervisor.states"
 							ng-if="count"
 							class="pull-right label label-{{ stateClass(state) }}"
-							>{{ count }} {{ state | lowercase}}</span>
+							title="{{ state | lowercase }}"
+							>{{ count }} <span class="glyphicon {{ glyphFor(state) }}"></span></span>
 					</a>
 				</li>
 			</ul>
@@ -162,13 +178,13 @@ supervisorApp.controller('SupervisorListCtrl', function($scope, $http) {
 								<td>{{ process.description }}</td>
 								<td>
 									<span class="glyphicon" style="width:1em;">
-										<a ng-href="/do.php?server={{ supervisor.alias }}&amp;procname={{ process.procname }}&amp;action=start" ng-if="isStartable(process.statename)"><span class="glyphicon glyphicon-play" title="Start"></span></a>
+										<a ng-href="/do.php?server={{ supervisor.alias }}&amp;procname={{ process.procname }}&amp;action=start" ng-if="isStartable(process.statename)"><span class="glyphicon {{ glyphFor(process.statename) }}" title="Start"></span></a>
 									</span>
 									<span class="glyphicon" style="width:1em;">
 										<a ng-href="/do.php?server={{ supervisor.alias }}&amp;procname={{ process.procname }}&amp;action=restart" ng-if="isRestartable(process.statename)"><span class="glyphicon glyphicon-refresh" title="Restart"></span></a>
 									</span>
 									<span class="glyphicon" style="width:1em;">
-										<a ng-href="/do.php?server={{ supervisor.alias }}&amp;procname={{ process.procname }}&amp;action=stop" ng-if="isRestartable(process.statename)"><span class="glyphicon glyphicon-stop" title="Stop"></span></a>
+										<a ng-href="/do.php?server={{ supervisor.alias }}&amp;procname={{ process.procname }}&amp;action=stop" ng-if="isRestartable(process.statename)"><span class="glyphicon {{ glyphFor(process.statename) }}" title="Stop"></span></a>
 									</span>
 									<span class="glyphicon" style="width:1em;">
 										<a ng-href="/do.php?server={{ supervisor.alias }}&amp;procname={{ process.procname }}&amp;action=viewlog"><span class="glyphicon glyphicon-align-left" title="View Log"></span></a>
